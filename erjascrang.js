@@ -1,13 +1,16 @@
 var Erjascrang = function(init) {
   init.call(this);
 
-  // default to using JS's built-in types
+  // default to using JS's built-in types. Override by re-assigning
+  // this.types() in your Erjascrang declaration.
   this.types = {
     "b": function(x) { return typeof x == 'boolean' },
     "o": function(x) { return typeof x == 'object' },
     "n": function(x) { return typeof x == 'number' },
     "u": function(x) { return typeof x == 'undefined' },
     "s": function(x) { return typeof x == 'string' },
+
+    // wildcard type, will match anything
     "$": function(x) { return true },
   };
 
@@ -54,14 +57,19 @@ var Erjascrang = function(init) {
   };
 };
 
+// testing erjascrang
+//
+// write erjascrang function declarations
 var erjascrang = new Erjascrang(function() {
   this.addTwo_s = function(s) { return this.addTwo(parseInt(s)); }
   this.addTwo_n = function(n) { return n+2; }
   this.addTwo_$ = function(n) { return 0; }
 });
 
+// compile
 var compiled = erjascrang.compile();
 
+// merge compiled methods into current scope
 for(var m in compiled) {
   this[m] = compiled[m];
 }
